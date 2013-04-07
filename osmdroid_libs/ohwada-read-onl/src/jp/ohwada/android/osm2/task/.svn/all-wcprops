@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task
+END
+ManageFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/ManageFile.java
+END
+CommonFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/CommonFile.java
+END
+NodeHash.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeHash.java
+END
+NodeListParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeListParser.java
+END
+NodeParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeParser.java
+END
+NodeListTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeListTask.java
+END
+CommonParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/CommonParser.java
+END
+LgdHttpClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/LgdHttpClient.java
+END
+NodeTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeTask.java
+END
+CommonAsyncTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/CommonAsyncTask.java
+END
+GeocoderTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/GeocoderTask.java
+END
+CommonTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/CommonTask.java
+END
+NodeListAsync.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeListAsync.java
+END
+NodeList.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeList.java
+END
+NodeListFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeListFile.java
+END
+NodeAsync.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeAsync.java
+END
+NodeRecord.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeRecord.java
+END
+GeocoderAsync.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/GeocoderAsync.java
+END
+NodeFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/206/Osm2/src/jp/ohwada/android/osm2/task/NodeFile.java
+END
