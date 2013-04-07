@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:contentDescription="@string/bg_people"
+        android:src="@drawable/bg_bottom_gray" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:contentDescription="@string/bg_people"
+        android:src="@drawable/bg_bottom_gray" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:contentDescription="@string/bg_camera"
+        android:scaleType="fitEnd"
+        android:src="@drawable/bg_camera" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#CCFFFFFF"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/top_panel"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5sp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp" >
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_detail_title"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/top_panel"
+                    android:layout_marginBottom="10dp">
+                </TextView>
+                                
+
+                <TextView
+                    android:id="@+id/tvCameraDescLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_desc"
+                    android:textStyle="bold"
+                    android:textSize="13sp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvCameraDesc"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvCameraLocationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_location"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    android:layout_marginTop="10dp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvCameraLocation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvCameraLocationAddressLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_location_address"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvCameraLocationAddress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:visibility="gone" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvCameraImageLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_image"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="13sp" >
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/ivCameraImage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/camera_image"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/no_camera" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

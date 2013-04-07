@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">@android:color/white</color>
+    <color name="black">@android:color/black</color>
+    <color name="red">#ca0202</color>
+    <color name="grey">#8a8a8a</color>
+    <color name="yellow">#fefe88</color>
+	<color name="top_panel">#099b7e</color>
+    <color name="light_grey">#f1f1f1</color>
+    
+</resources>
