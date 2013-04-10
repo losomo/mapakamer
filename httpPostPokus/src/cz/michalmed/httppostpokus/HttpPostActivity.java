@@ -2,7 +2,6 @@ package cz.michalmed.httppostpokus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -36,19 +35,24 @@ public class HttpPostActivity extends Activity {
 	
 	public void posliDoDb(View v){
 		EditText editText = (EditText) findViewById(R.id.editText1);
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("http://geo102.fsv.cvut.cz/pin2/2013/b/pokus1.php");
 		
 		try {
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-			nameValuePairs.add(new BasicNameValuePair("jmeno", editText.toString()));
+			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("jmeno", editText.getText().toString()));
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://geo102.fsv.cvut.cz/pin2/2013/b/pokus1.php");
+			
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));	// Execute HTTP Post Request
 	        HttpResponse response = httpclient.execute(httppost);
 	        
-	    } catch (ClientProtocolException e) {
-	        // TODO Auto-generated catch block
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
+	    } catch (ClientProtocolException ey) {
+	        System.out.println("Chyba1");
+	        ey.printStackTrace();
+	        System.exit(1);
+	    } catch (IOException ex) {
+	    	System.out.println("Chyba2");
+	    	ex.printStackTrace();
+	        System.exit(1);
 	    }
 		
 	}
