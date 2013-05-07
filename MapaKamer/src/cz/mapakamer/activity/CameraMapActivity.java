@@ -7,7 +7,6 @@ import java.util.List;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,6 +17,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import cz.mapakamer.R;
 import cz.mapakamer.entity.Camera;
+import cz.mapakamer.overlay.ImageOverlayItem;
 import cz.mapakamer.overlay.ItemizedOverlay;
 import cz.mapakamer.utils.GPSUtility;
 
@@ -107,9 +107,10 @@ public class CameraMapActivity extends Activity {
     public void addMarkerToOverlay(GeoPoint point, String title, String content, MapView mapView, List<Overlay> mapOverlays)
     {
         Drawable drawable = this.getResources().getDrawable(R.drawable.cctv);
+        Drawable image = this.getResources().getDrawable(R.drawable.images);
         ItemizedOverlay itemizedOverlay = new ItemizedOverlay(drawable, this);
         
-    	OverlayItem overlayItem = new OverlayItem(title, content, point);
+    	ImageOverlayItem overlayItem = new ImageOverlayItem(title, content, point, image);
 	    itemizedOverlay.addItem(overlayItem);
 	    mapView.getOverlays().add(itemizedOverlay.getOverlay());
     }
@@ -117,6 +118,7 @@ public class CameraMapActivity extends Activity {
     public void addMarkerToOverlay(ArrayList<Camera> cameras, MapView mapView, List<Overlay> mapOverlays)
     {
     	Drawable drawable = this.getResources().getDrawable(R.drawable.cctv);
+    	Drawable image = this.getResources().getDrawable(R.drawable.images);
     	ItemizedOverlay itemizedOverlay = new ItemizedOverlay(drawable, this);
     	
     	for (Camera camera : cameras)
@@ -128,7 +130,7 @@ public class CameraMapActivity extends Activity {
     		GeoPoint point = camera.getCoordinates();
     		GeoPoint point2 = new GeoPoint(longitude, latitude);
 
-    		OverlayItem overlayItem = new OverlayItem(" ", content, point);
+    		ImageOverlayItem overlayItem = new ImageOverlayItem(" ", content, point, image);
     		itemizedOverlay.addItem(overlayItem);
     		mapView.getOverlays().add(itemizedOverlay.getOverlay());
     	}
