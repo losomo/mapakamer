@@ -1,0 +1,21 @@
+Mobilní aplikace pro mapování kamer ve veřejných prostorech
+Skupina: B (2013)
+
+Cílem projektu je tvorba aplikace pro Iuridicum Remedium, o. s., která
+by měla sloužit k mapování kamer ve veřejných prostorech. Aplikace
+bude určena pro mobilní zařízení s operačním systémem Android a bude
+napsána v programovacím jazyce Java. Aplikace by měla umožňovat
+zobrazení vrstvy s již zmapovanými kamerami ve veřejných prostorech
+nad OpenStreetMap a přidávání nových kamer pomocí předání souřadnic
+GPS a fotografie z mobilního zařízení do vrstvy OSM se zmapovanými
+kamerami. Vkládání bude probíhat přes zprostředkovatelský server, na
+který se budou ukládat fotografie a který bude obsahovat databázi
+kamer, do které budou vkládány kamery rovnou z aplikace. Na serveru
+zprovozníme databázi PostgreSQL a pohyb dat mezi aplikací, databází a
+OpenStreetMap bude umožněn pomocí PHP skriptů. Budeme vycházet z
+aplikace, která byla k tomuto účelu naprogramována na restartu
+iniciovaném občanským sdružením Iuridicum Remedium a upravíme ji podle
+našich potřeb. V současné aplikaci nefunguje komunikace se serverem,
+protože žádný server neexistuje, a prohlížečka mapy je založena na
+Google Maps. Google Maps chceme v aplikaci kompletně nahradit
+OpenStreetMap.

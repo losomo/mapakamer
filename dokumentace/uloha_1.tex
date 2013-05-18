@@ -1,0 +1,88 @@
+\documentclass[10pt,a4paper, titlepage]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{a4wide}
+\usepackage{verbatim}
+\newenvironment{mylisting}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item\scriptsize\bfseries}
+{\end{list}}
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+
+% Upper part of the page. The '~' is needed because \\
+% only works if a paragraph has started.
+
+\includegraphics[width=0.3\textwidth]{pics/logo_cvut.jpg}\\[0.4cm]
+
+\textsc{České vysoké učení technické v Praze\\Fakulta stavební}\\[0.4cm]
+\textsc{\\\small{Projekt Informatika 2} \\\small{Akedemický rok 2012/2013}}\\[0.4cm]
+
+% Title
+ \huge \bfseries{Mapa kamer -- mobilní aplikace pro Android}\\\textsc{\small{Dokumentace}}\\[0.4cm]
+
+% Author and supervisor
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Autoři:}\\
+Martin \textsc{Lžíčař}\\
+Dan \textsc{Dluhoš}\\ 
+Michal \textsc{Med}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Vedoucí:} \\
+Ing. Martin \textsc{Landa}\\
+Katedra mapování a kartografie\\
+K153
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\chapter*{Zadání}
+\verbatiminput{sections/zadani.txt}
+
+\include{sections/uvod}
+\newpage
+
+\include{sections/aplikace}
+\newpage
+
+\include{sections/databaze}
+\newpage
+
+\include{sections/propojeni_app_s_db}
+\newpage
+
+\include{sections/problemy_pri_implementaci}
+\newpage
+
+\include{sections/zaver}
+\newpage
+
+\include{sections/seznam_zdroju}
+
+\end{document}

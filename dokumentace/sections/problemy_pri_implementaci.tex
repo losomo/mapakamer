@@ -1,0 +1,11 @@
+\chapter{Problémy při implementaci aplikace}
+S problémy jsme se setkávali téměř nepřetržitě. Verze, kterou teď prezentujeme, se od verze kterou odevzdáme sdružení IuRe ještě trochu liší právě proto, že jsme se některé z problémů zatím rozhodli ignorovat (pokud přímo nenarušují chod aplikace) a vyřešíme je před odevzdáním aplikace sdružení. Tyto problémy jsou většinou spojeny s vytížením serveru a případném zahlcení, pokud by se do databáze časem nahrálo hodně dat a obrázků. Řešení je nasnadě:
+\begin{itemize}
+\item Naindexování databáze.
+\item Cachování obrázků.
+\item Používání BLOBu pro obrázek místo adresy umístění na serveru.
+\end{itemize}
+\paragraph{}
+Tyto úkony provedeme před finálním odevzdáním aplikace. Vzhledem k pokročilosti těchto technik si myslíme, že jsou nad rámec obsahu projektu informatika 2, ale máme chu\v{t} na aplikaci pracovat dál. 
+\paragraph{}
+Samozřejmě jsme se při tvorbě aplikaci setkali s větším počtem problémů, ale ty byly bu\v{d} popsány v jiné části této dokumentace nebo vyřešeny.

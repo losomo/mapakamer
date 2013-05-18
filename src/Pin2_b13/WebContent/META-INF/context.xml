@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource
+        name="jdbc/db" type="javax.sql.DataSource"
+        maxActive="100" maxIdle="30" maxWait="10000" 
+        url="jdbc:postgresql://geo102.fsv.cvut.cz/pin2_b13"
+        driverClassName="org.postgresql.Driver"
+        username="pin2_b13" password="skupinaB"
+    />
+</Context>

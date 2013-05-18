@@ -1,0 +1,20 @@
+\chapter{Databáze}
+Jako databáze na které aplikace pojede byla zvolena databáze \texttt{PostgreSQL}. Důvody jsou dva:
+\begin{itemize}
+\item Jedná se o open source projekt.
+\item Projekt \texttt{OpenStreetMap} používá jako databázi také \texttt{PostgreSQL}.
+\end{itemize}
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[scale=0.5]{pics/postgresql_logo.png}
+\caption{Logo projektu PostgreSQL, na kterém slon reprezentuje dobrou pamě\v{t}}
+\end{center}
+\end{figure}
+\paragraph{}
+Základem pro databázi bylo schéma, které nám laskavě poskytl pan inženýr Martin \textsc{Landa}. Schéma obsahovalo data \texttt{OpenStreetMap} pro Českou Republiku. Ze schématu jsme vytáhli pomocí následujícího příkazu vytáhli všechny body s tagem \textbf{surveillance} a uložili je do tabulky \texttt{b\_kamery}.
+\paragraph{}
+\texttt{CREATE TABLE b\_kamery AS (SELECT osm\_id,name,ST\_X(ST\_Transform(way::geometry,4326)) AS lat,ST\_Y(ST\_Transform(way::geometry,4326)) AS lon FROM osm.czech\_point WHERE man\_made ='surveillance');}
+\paragraph{}
+Tabulka \texttt{b\_kamery} obsahuje identifikátor, informace o kameře, souřadnice kamery, které byly naimportovány ze schématu \texttt{osm} a navíc jsme přidali atribut \texttt{image}, který zatím obsahuje adresu obrázku na serveru. Do budoucna plánujeme obrázky ukládat jako BLOB\footnote{Binary Large OBject}, protože při větším množství obrázků by pravděpodobně byl velký problém s pamětí. Z důvodů nevhodného k\'{o}dování se v informačním okně kamery zobrazuje pouze obrázek a nikoliv popis kamery.
+\paragraph{}
+Pro zrychlení vyhledávacích a dotazovacích procesů v databázi bude záhodno databázi naindexovat. Indexy v databázi by ji mohli výrazně zrychlit a zvláště u pomalejších zařízeních a zařízeních s menší kapacitou paměti to dost pomůže rychlému chodu aplikace. Principem indexování je přenesení paměťové a kapacitní náročnosti ze zařízení na server, což by při porovnání výpočetní kapacity serveru a výpočetní kapacity mobilního zařízení nemělo vůbec vadit. 

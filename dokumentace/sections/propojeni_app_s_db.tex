@@ -1,0 +1,29 @@
+\chapter{Připojení k databázi na serveru}
+Kapitola se věnuje řešením a problémům při práci na propojení mobilní aplikace s databází. Naším požadavkem bylo načítat data z databáze a zároveň do ní data i vkládat. Zkusili jsme několik způsobů, které krátce popíšeme a poté se podrobněji zaměříme na řešení, které bylo zvoleno.
+
+\paragraph{}
+Jako první jsme vymysleli, že z mobilní aplikace by se poslal požadavek \texttt{http post} na \texttt{php} skript na serveru. Ten by pracoval s databází a prováděl požadované operace nad daty. Tento způsob se nám nepodařilo implementovat a dozvěděli jsme se, že to není bezpečný způsob. Proto jsme další vývoj přerušili a zkusili něco jiného.
+
+\paragraph{}
+Implementovali jsme možnost, že by se samotná mobilní aplikace připojila přímo do databáze. Tento způsob fungoval a oba naše požadavky byly splněny. Ale při hledání řešení jsme objevili, že tento způsob je velmi náročný na výpočetní techniku, protože navázání spojení je to nejtěžší na celém procesu připojení aplikace k databázi. Po konzultaci s doktorem Janem Pytlem jsme se rozhodli použít \texttt{Java Servlety}.
+
+\section{Java Servlet}
+Servlet je třída v jazyce Java, která rozšiřuje možnosti serveru. Servlet umí zpracovat požadavek \texttt{request} a odpovědět \texttt{response}. Musí běžet na serveru, který zvládne zpracovat programovací jazyk Java. Použili jsme \texttt{Apache Tomcat 7}\footnote{http://tomcat.apache.org/}. Ten implementuje verzi \texttt{Servlet 3.0}, jehož možnosti jsme využili a zmíníme je dále.
+\paragraph{}
+Webová aplikace se servlety si s použitím interfacu \texttt{DataSource} předpřipraví připojení do databáze a vyhne se tím problému náročného přímého přístupu do databáze. Tyto předpřipravené připojení pak \uv{půjčuje} servletům, které reagují na požadavky z mobilní aplikace. Nastavení připojení se nastavuje v souboru \texttt{context.xml}. V tomto souboru jsou přihlašovací údaje do databáze. K tomuto souboru má přístup pouze administrátor a jiná bezpečnostní opatření se zpravidla neaplikují\footnote{Konzultace s Ing. Janem Pytlem Ph.D.}.
+
+\paragraph{}
+Z důvodů popsaných výše jsme vytvořili jednoduchou webovou aplikaci obsahující následující dva servlety. 
+\begin{itemize}
+\item Servlet \textbf{GetFromDB.java}, který se stará o získávání dat z databáze. Podle parametru získaného z \texttt{HttpServletRequest} je nastavena odpověď do \texttt{HttpServletResponse}. Parametrem je adresa umístění obrázku, který bude následně odeslán do mobilního zařízení. Pokud není žádný parametr uveden, pak jsou do mobilní aplikace poslány všechny kamery z databáze.
+\item Servlet \textbf{SaveToDB.java}, který z částí \texttt{HttpServletRequest} získá informace o nově přidávané kameře a vloží ji do databáze. V tomto servletu byly použity nové technologie z verze \texttt{Servletu 3.0}. Pří sestavování požadavku o kameře v mobilní aplikaci byl použit objekt \texttt{MultipartEntity}. Ten umož\v{n}uje poslat jedním http postem jak samotný text, tak i soubory, což jsou v našem případě fotografie kamer. Ty jsou ukládány v adresáři pod jmény podle času vložení. to zajiš\v{t}uje unikátní název souboru, který je uložen do databáze.
+\end{itemize}
+
+\section{Vytváření požadavku v mobilním zařízením}
+Požadavek na server se vytváří v mobilním zařízením ve třech případech.
+\begin{itemize}
+\item \textbf{Poslání nové kamery do databáze} - pomocí výše zmíněné \texttt{MultipartEntity} se posílají všechna data (např. souřadnice, obrázek kamery) ke zpracovaní do webové aplikace.
+\item \textbf{Při zobrazení mapy kamer} - neposílá se žádný parametr, ale z webové aplikace se získávají data o kamerách. V databázi není uložen přímo obrázek, ale pouze cesta na místo na serveru kde je obrázek uložen. Aplikace vytáhne soubor ze serveru a použije ho v informačním okně kamery jako její obrázek. V současné době se načítají z databáze všechny kamery, což je velmi náročné na pame\v{t} mobilního zařízení. V dalším vývoji aplikace se tento problém vyřeší nahráním kamer pouze z okolí současné lokace přístroje.
+\item \textbf{Při zobrazení obrázku kamery} - jako parametr se nastavuje název souboru s obrázkem kamery, na kterou uživatel poklepal. Tento obrázek se zobrazí na obrazovce mobilního zařízení. 
+\end{itemize} 
+Při vytváření požadavků na server jsme narazili na zajímavý problém. Pokud byl požadavek vytvářen přímo v dané aktivitě, tak tento požadavek nešel poslat na server. Důvod byl ten, že od určité verze Android API nešel poslat požadavek v hlavním vlákně aplikace. Pomocí třídy \texttt{AsyncTask} \footnote{http://developer.android.com/reference/android/os/AsyncTask.html} lze jednoduše provádět operace v jiném vlákně aplikace, ve kterém se provede odeslání požadavku na server. 
