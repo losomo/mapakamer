@@ -1,12 +1,12 @@
 package cz.mapakamer.activity;
 
 
-import cz.mapakamer.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import cz.mapakamer.R;
 
 public class HomeActivity extends Activity {
 
@@ -14,6 +14,8 @@ public class HomeActivity extends Activity {
 	private LinearLayout ll_add;
 	private LinearLayout ll_show;
 	private LinearLayout ll_about;
+	private LinearLayout ll_donate;
+
 	
 	
 	@Override
@@ -30,10 +32,12 @@ public class HomeActivity extends Activity {
 		ll_add = (LinearLayout)findViewById(R.id.llAddCamera);
         ll_show = (LinearLayout)findViewById(R.id.llShowMap);
         ll_about = (LinearLayout)findViewById(R.id.llAbout);
+        ll_donate = (LinearLayout)findViewById(R.id.llDonate);
 		
 		ll_add.setClickable(true);
 		ll_show.setClickable(true);
 		ll_about.setClickable(true);
+		ll_donate.setClickable(true);
 		
         
 		ll_add.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +58,12 @@ public class HomeActivity extends Activity {
 	    	}
 	    });
 		
+		ll_donate.setOnClickListener(new View.OnClickListener() {
+	    	public void onClick(View v) {
+	    		showDonate();
+	    	}
+	    });
+		
 	}
 	
 	public void addNewCamera() {
@@ -68,6 +78,11 @@ public class HomeActivity extends Activity {
 	
 	public void showAbout() {
 		Intent i = new Intent(this, AboutActivity.class);
+		startActivity(i);
+	}
+	
+	public void showDonate() {
+		Intent i = new Intent(this, DonateActivity.class);
 		startActivity(i);
 	}
 	

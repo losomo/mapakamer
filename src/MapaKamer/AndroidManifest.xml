@@ -39,7 +39,7 @@
         <activity android:name="cz.mapakamer.activity.AboutActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="cz.mapakamer.activity.CameraMapActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="cz.mapakamer.activity.CameraDetailActivity" android:screenOrientation="portrait"></activity>
-        
+        <activity android:name="cz.mapakamer.activity.DonateActivity" android:screenOrientation="portrait"></activity>        
     </application>
 
 </manifest>

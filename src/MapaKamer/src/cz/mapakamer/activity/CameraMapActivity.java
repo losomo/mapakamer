@@ -14,6 +14,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.osmdroid.events.DelayedMapListener;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -39,6 +44,8 @@ public class CameraMapActivity extends Activity {
 	private LocationListener gpsLocListener;
 	private LocationListener networkLocListener;
 	private boolean gpsDialogAnswered;
+	private boolean locationInitialized = false;
+	private BoundingBoxE6 currentBBox;
 
 	/** Called when the activity is first created. */
     @Override
@@ -46,8 +53,8 @@ public class CameraMapActivity extends Activity {
     {
     	super.onCreate(savedInstanceState);
 
-        MapView mapView = new MapView(this, 256);
-        List<Overlay> mapOverlays = mapView.getOverlays();
+        final MapView mapView = new MapView(this, 256);
+        final List<Overlay> mapOverlays = mapView.getOverlays();
         mapView.setClickable(true);
         mapView.setBuiltInZoomControls(true);
  
@@ -63,76 +70,35 @@ public class CameraMapActivity extends Activity {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-		initLocation(mapView);
+		if (!locationInitialized)
+		{
+			initLocation(mapView);
+		}
         setContentView(mapView);
-        addMarkerToOverlay(cameras, mapView, mapOverlays);}
-    	/*
-        //TODO: create method getCamerasFromDB() which will put all cameras into List
-        
-        GeoPoint point = new GeoPoint(50.1042572, 14.3887436);
-        GeoPoint point2 = new GeoPoint(50.0719661, 14.4090608);
-        GeoPoint point3 = new GeoPoint(50.0802069, 14.3946717);
-        
-        Camera camera1 = new Camera();
-        camera1.setCoordinates(point);
-        camera1.setDescription("krásná malá kamerka");
-        camera1.setImage(this.getResources().getDrawable(R.drawable.images));
-        
-        Camera camera2 = new Camera();
-        camera2.setCoordinates(point2);
-        camera2.setDescription("větší a ne tak hezká kamerka");
-        camera2.setImage(this.getResources().getDrawable(R.drawable.cctv_tree));
-
-        Camera camera3 = new Camera();
-        camera3.setCoordinates(point3);
-        camera3.setDescription("ještě jedna kamerka");
-        camera3.setImage(this.getResources().getDrawable(R.drawable.cctv_sign));
-        
-        //ArrayList<Camera> cameras = new ArrayList<Camera>();
-        //cameras.add(camera1);
-        //cameras.add(camera2);
-        //cameras.add(camera3);
-        
         addMarkerToOverlay(cameras, mapView, mapOverlays);
+       
+        mapView.setMapListener(new DelayedMapListener(new MapListener() {
+			
+			@Override
+			public boolean onZoom(final ZoomEvent e) {
+				setCurrentBBox(mapView);
+				return false;
+			}
+			
+			@Override
+			public boolean onScroll(final ScrollEvent e) {
+				setCurrentBBox(mapView);
+				return false;
+			}
+		}, 100 ));
+        
     }
-    
-    
-    //TODO: think about it. maybe it should be nice to have some small button retrieving current position with this method
-	/*@Override
-	public void onResume() {
-		super.onResume();
-		MapView mapView = new MapView(this, 256);
-    	List<Overlay> mapOverlays = mapView.getOverlays();
-
-        mapView.setClickable(true);
-        mapView.setBuiltInZoomControls(true);
- 
-        initLocation(mapView);
-        setContentView(mapView);
-                
-        //TO DO: create method getCamerasFromDB() which will put all cameras into List
-        
-        GeoPoint point = new GeoPoint(49.0, 14.5);
-        GeoPoint point2 = new GeoPoint(49.1, 14.4);
-        
-        Camera camera1 = new Camera();
-        camera1.setCoordinates(point);
-        camera1.setDescription("krásná malá kamerka");
-        
-        Camera camera2 = new Camera();
-        camera2.setCoordinates(point2);
-        camera2.setDescription("větší a ne tak hezká kamerka");
-
-        ArrayList<Camera> cameras = new ArrayList<Camera>();
-        cameras.add(camera1);
-        cameras.add(camera2);
-        
-        addMarkerToOverlay(cameras, mapView, mapOverlays);
-        //TO DO: override addMarkerOverlay(Point p, String t, String c, MapView mv, List<Overlay> mo) to addMarkerOverlay(List<List>, MapView mv, List<Overlay> mo) 
-	    //addMarkerToOverlay(point, "s", "plakat", mapView, mapOverlays);
-	    //addMarkerToOverlay(point2, "hh", "cctv skodi", mapView, mapOverlays);
-	
-	}*/
+    	
+   
+    public void setCurrentBBox(MapView mapView)
+    {
+    	currentBBox = mapView.getProjection().getBoundingBox();
+    }
     
     public void addMarkerToOverlay(GeoPoint point, String title, String content, Drawable image, MapView mapView, List<Overlay> mapOverlays)
     {
@@ -182,8 +148,11 @@ public class CameraMapActivity extends Activity {
 
 			public void onLocationChanged(Location location) {
 				gpsLocation = location;
-				updateLocation(mapView);
-				setProgressBarIndeterminateVisibility(Boolean.FALSE);
+				if (!locationInitialized){
+					updateLocation(mapView);
+					locationInitialized = true;
+					setProgressBarIndeterminateVisibility(Boolean.FALSE);
+				}
 			}
 		};
 
@@ -200,7 +169,11 @@ public class CameraMapActivity extends Activity {
 
 			public void onLocationChanged(Location location) {
 				networkLocation = location;
-				updateLocation(mapView);
+				if (!locationInitialized) 
+				{
+					updateLocation(mapView);
+					locationInitialized = true;
+				}
 			}
 		};
 
@@ -223,27 +196,9 @@ public class CameraMapActivity extends Activity {
 		GeoPoint center = new GeoPoint(location.getLatitude(), location.getLongitude());
 		mapView.getController().setCenter(center);
 		mapView.getController().setZoom(16);
+		setCurrentBBox(mapView);
 	}
-	
-	/*private ArrayList<Camera> allCameras(String kamery)
-	{
-		ArrayList<Camera> cameras = new ArrayList<Camera>();
 		
-		String[] kamera = kamery.split(";");
-		String[] castKamery=null;
-		for(int i=0;i<kamera.length;i++)
-		{
-			castKamery=kamera[i].split("::");
-			Camera cam=new Camera();
-			//cam.setId(Integer.parseInt(castKamery[0]));
-			cam.setCoordinates(new GeoPoint(Double.parseDouble(castKamery[2]),Double.parseDouble(castKamery[1])));
-			//cam.setDescription(castKamery[1]);
-			cam.setAddress(castKamery[3]);
-			cameras.add(cam);
-		}
-		return cameras;
-	}*/
-	
 	private class LoadCameras extends AsyncTask<Void,Void,ArrayList<Camera>>{
 			@Override
 			protected ArrayList<Camera> doInBackground(Void...q) {
