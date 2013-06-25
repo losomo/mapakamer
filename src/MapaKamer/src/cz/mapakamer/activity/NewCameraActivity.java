@@ -229,15 +229,16 @@ public class NewCameraActivity extends Activity {
 				HttpContext localContext = new BasicHttpContext();
 				entity.addPart("jmeno", new StringBody(et_desc.getText().toString()));
 				//entity.addPart("lat",new StringBody(et_location.getText().toString()));
-				entity.addPart("lat",new StringBody(Double.toString(camera.getLatitude())));
-				entity.addPart("lon",new StringBody(Double.toString(camera.getLongitude())));
+				entity.addPart("lon",new StringBody(Double.toString(camera.getLatitude())));
+				entity.addPart("lat",new StringBody(Double.toString(camera.getLongitude())));
 				//entity.addPart("lat",new StringBody("49.8"));
 				//entity.addPart("lon",new StringBody("14.5"));
 				HttpClient httpclient = new DefaultHttpClient();
 //				HttpPost httppost = new HttpPost("http://10.0.2.2:8080/Pin2_b13/SaveToDB");
-				HttpPost httppost=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/SaveToDB");
+				//HttpPost httppost=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/SaveToDB");
+				HttpPost httppost=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/SaveToDB");
 				ByteArrayOutputStream bos=new ByteArrayOutputStream();
-				imageBitmap.compress(CompressFormat.JPEG, 75, bos);
+				imageBitmap.compress(CompressFormat.JPEG, 50, bos);
 				byte[] data=bos.toByteArray();
 				entity.addPart("uploaded", new ByteArrayBody(data,"myImage.jpg"));
 				httppost.setEntity(entity);	// Execute HTTP Post Request

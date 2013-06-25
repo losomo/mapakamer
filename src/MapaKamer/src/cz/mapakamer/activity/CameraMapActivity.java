@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
@@ -60,22 +63,13 @@ public class CameraMapActivity extends Activity {
  
         mapView.getController().setZoom(10);
         mapView.getController().setCenter(new GeoPoint(50.0, 14.5));
-        LoadCameras lc = new LoadCameras();
-		lc.execute();
-		ArrayList<Camera> cameras=new ArrayList<Camera>();
-		try {
-			cameras = lc.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+        
 		if (!locationInitialized)
 		{
 			initLocation(mapView);
 		}
         setContentView(mapView);
-        addMarkerToOverlay(cameras, mapView, mapOverlays);
+        setCurrentBBox(mapView);
        
         mapView.setMapListener(new DelayedMapListener(new MapListener() {
 			
@@ -91,6 +85,17 @@ public class CameraMapActivity extends Activity {
 				return false;
 			}
 		}, 100 ));
+        LoadCameras lc = new LoadCameras();
+		lc.execute();
+		ArrayList<Camera> cameras=new ArrayList<Camera>();
+		try {
+			cameras = lc.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		addMarkerToOverlay(cameras, mapView, mapOverlays);
         
     }
     	
@@ -208,10 +213,16 @@ public class CameraMapActivity extends Activity {
 					
 					HttpClient httpclient = new DefaultHttpClient();
 					//HttpPost hp=new HttpPost("http://10.0.2.2:8080/Pin2_b13/GetFromDB");
-					HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
+					//HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
+					HttpPost hp=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/GetFromDB");
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6())));
+			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6())));
+			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6())));
+			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6())));
+			        hp.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			        HttpResponse res = httpclient.execute(hp);
 			        inputStream = res.getEntity().getContent();
-
 		            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
 		            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -235,7 +246,7 @@ public class CameraMapActivity extends Activity {
 		    			Camera cam=new Camera();
 		    			//cam.setId(Integer.parseInt(castKamery[0]));
 		    			cam.setCoordinates(new GeoPoint(Double.parseDouble(castKamery[2]),Double.parseDouble(castKamery[1])));
-		    			//cam.setDescription(castKamery[1]);
+		    			cam.setDescription(castKamery[0]);
 		    			cam.setAddress(castKamery[3]);
 		    			cameras.add(cam);
 		    		}

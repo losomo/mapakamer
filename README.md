@@ -1,4 +1,0 @@
-mapakamer
-=========
-
-mapakamer.cz

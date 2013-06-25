@@ -104,7 +104,8 @@ public class ItemizedOverlay {
 				
 				HttpClient httpclient = new DefaultHttpClient();
 				//HttpPost hp=new HttpPost("http://10.0.2.2:8080/Pin2_b13/GetFromDB");
-				HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
+				//HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
+				HttpPost hp=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/GetFromDB");
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 		        nameValuePairs.add(new BasicNameValuePair("path", q[0]));
 		        hp.setEntity(new UrlEncodedFormEntity(nameValuePairs));
