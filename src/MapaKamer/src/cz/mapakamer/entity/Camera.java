@@ -9,9 +9,6 @@ import android.location.Location;
 public class Camera {
 
 	private static final int STATUS_NEW = 0;
-	private static final int STATUS_ACCEPTED = 1;
-	private static final int STATUS_REJECTED = -1;
-	
 	private int id;
 	private double latitude;
 	private double longitude;

@@ -1,8 +1,12 @@
 package cz.mapakamer.activity;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -38,7 +42,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import cz.mapakamer.R;
-import cz.mapakamer.app.MapaKamerApp;
 import cz.mapakamer.entity.Camera;
 import cz.mapakamer.utils.GPSUtility;
 
@@ -46,7 +49,6 @@ public class NewCameraActivity extends Activity {
 
 	public static final int CAPTURE_IMG = 0;
 
-	private MapaKamerApp app;
 	protected Camera camera;
 	private Uri imageUri;
 	private Bitmap imageBitmap;
@@ -55,7 +57,10 @@ public class NewCameraActivity extends Activity {
 	private LocationListener gpsLocListener;
 	private LocationListener networkLocListener;
 	private boolean gpsDialogAnswered;
-
+	private long currTimestamp = new java.util.Date().getTime();
+	private String picfilename = currTimestamp + ".jpg";
+	private String contentfilename = currTimestamp + ".txt";
+	
 	private EditText et_desc;
 	private EditText et_location;
 	private EditText et_address;
@@ -65,8 +70,12 @@ public class NewCameraActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_camera);
 
-		app = (MapaKamerApp) getApplication();
-
+		File directory = new File(Environment.getExternalStorageDirectory()+File.separator+"MapaKamer");
+		if (!directory.exists())
+		{
+			directory.mkdirs();
+		}
+		
 		et_location = (EditText) findViewById(R.id.etCameraLocation);
 		et_address = (EditText) findViewById(R.id.etCameraLocationAddress);
 		et_desc = (EditText) findViewById(R.id.etCameraDesc);
@@ -109,7 +118,6 @@ public class NewCameraActivity extends Activity {
 
 			public void onProviderDisabled(String provider) {
 			}
-
 			public void onLocationChanged(Location location) {
 				networkLocation = location;
 				updateLocation();
@@ -148,14 +156,13 @@ public class NewCameraActivity extends Activity {
 
 	public void captureCamera(View view) {
 		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-
-		File photo = new File(Environment.getExternalStorageDirectory(),
-				"newCamera.jpg");
+		File directory = new File(Environment.getExternalStorageDirectory()+File.separator+"MapaKamer");
+		File photo = new File(directory, picfilename);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
 		imageUri = Uri.fromFile(photo);
 		startActivityForResult(intent, CAPTURE_IMG);
 	}
-
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -183,14 +190,37 @@ public class NewCameraActivity extends Activity {
 	}
 
 	public void sendCamera(View view) {
-
-		// TODO / pro prezentacni ucely.... predelat na sql lite/ server post
-		// task
-		
 		processSendingTask task = new processSendingTask();
 	    task.execute();
 
 	}
+	
+	public void saveCamera(View view) {		
+		String record = et_desc.getText().toString() + ";" + Double.toString(camera.getLatitude()) + ";" + Double.toString(camera.getLongitude()) + ";" + picfilename; 
+		
+		File directory = new File(Environment.getExternalStorageDirectory()+File.separator+"MapaKamer");
+		File cameraContent = new File(directory, contentfilename);
+		OutputStream out = null;
+		
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(cameraContent));
+			out.write(record.getBytes());
+		} catch (FileNotFoundException e) {
+            System.out.println("File not found" + e);
+		} catch (Exception e){
+            System.out.println("Error while writing to file" + e);
+		}finally {
+			if (out != null)
+				try {
+					out.flush();
+					out.close();
+				} catch (Exception e) {
+	                System.out.println("Error while closing streams" + e);
+				}
+		}
+		finish();
+	}
+
 
 	private Builder cameraSavedDialogPreperation() {
 		Builder dialog;

@@ -32,10 +32,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>        
-       	
-        <activity android:name="cz.mapakamer.activity.HomeActivity" android:screenOrientation="portrait"></activity>
+        </activity> 
+    	<activity android:name="cz.mapakamer.activity.HomeActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="cz.mapakamer.activity.NewCameraActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="cz.mapakamer.activity.AddCamerasActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="cz.mapakamer.activity.AboutActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="cz.mapakamer.activity.CameraMapActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="cz.mapakamer.activity.CameraDetailActivity" android:screenOrientation="portrait"></activity>

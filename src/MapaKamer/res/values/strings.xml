@@ -1,34 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Mapa kamer</string>
     <string name="version">1.0</string>
     <string name="logo">logo aplikace</string>
-    
-	<string name="bg_people">lidé na pozadí</string>
+    <string name="bg_people">lidé na pozadí</string>
     <string name="bg_camera">kamera na pozadí</string>
-    
-    
     <string name="add_camera_picture">Přidat kameru</string>
+    <string name="add_cameras">Přidat uložené kamery</string>
     <string name="show_camera_map">Zobrazit mapu kamer</string>
     <string name="about">O projektu</string>
     <string name="donate">Podpořte nás</string>
-    
     <string name="about_project">Projekt Mapa kamer má za cíl s pomocí vás všech zmapovat umístění bezpečnostních kamer ve veřejném prostoru. Věříme, že pokud neohlídáme hlídače sami, tak to nikdo jiný neudělá. Mapa kamer umístěná na www.mapakamer.cz funguje na platformě OpenStreetMap, svobodné editovatelné mapě celého světa, kterou tvoří samotní uživatelé. Vedle informování o tom, kde nás oči Velkého bratra sledují, chceme mapou přispět k oživení diskuze o výhodách a nevýhodách kamerových systémů v našich městech a obcích. Věříme, že zájem občanů o kamery povede ke zvolnění tempa zavádění kamerových systémů, k větší rozvaze obcí při utrácení peněz za naddimenzované kamerové systémy, ale ve svém důsledku i k větší míře svobody nás všech.</string>
     <string name="about_iure">Občanské sdružení Iuridicum Remedium je watchdogová nezisková organizace zaměřená zejména na problematiku ochrany lidských práv v souvislosti s novými technologiemi. Hlavním oborem našeho zájmu je problematika ochrany soukromí a ochrany osobních údajů. Každý rok mimo jiné vyhlašujeme anticeny Big Brother Awards pro největší slídily v našem soukromí. Více informací o nás a možnosti jak naše aktivity podpořit najdete na www.iure.org a www.slidilove.cz.</string>
-    
     <string name="how_to_donate">Tady bude text který popíše jakým způsobem je možné přispět na chod aplikace.</string>
-    
     <string name="camera_desc">Popis kamery</string>
     <string name="camera_location">GPS lokace</string>
     <string name="camera_location_address">Adresa lokace</string>
     <string name="camera_image">Snímek kamery</string>
     <string name="capture_camera">Vyfotit kameru</string>
     <string name="send_camera">Odeslat kameru</string>
+    <string name="save_camera">Uložit do zařízení</string>
     <string name="camera_detail_title">Detail kamery</string>
-    <string name="camera_saved">Kamera úspěšně uložena.</string>
-    
-    
+    <string name="camera_saved">Kamera byla úspěšně nahrána do databáze.</string>
     <string name="fail_capture">Nezdařilo se pořídit snímek!</string>
     <string name="close_button">Zavřít</string>
     <string name="gps_not_enabled">GPS zařízení je vypnuté. Pro získání přesnějšího polohy jej prosím zapněte. Přejete si přejít do nastavení?</string>
+    <string name="title_activity_add_cameras">AddCamerasActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="send_cameras">Odeslat označené kamery</string>
+
 </resources>

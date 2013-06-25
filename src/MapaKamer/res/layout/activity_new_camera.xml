@@ -58,28 +58,6 @@
                 android:orientation="vertical"
                 android:padding="5dp" >
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                    <Button
-                        android:id="@+id/butCameraCapture"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="captureCamera"
-                        android:text="@string/capture_camera" >
-                    </Button>
-
-                    <Button
-                        android:id="@+id/butCameraSend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="sendCamera"
-                        android:text="@string/send_camera" >
-                    </Button>
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/tvCameraDescLabel"
                     android:layout_width="wrap_content"
@@ -144,6 +122,13 @@
                     android:textSize="12sp" >
                 </TextView>
 
+                <Button
+                    android:id="@+id/butCameraCapture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="captureCamera"
+                    android:text="@string/capture_camera" />
+
                 <ImageView
                     android:id="@+id/ivCameraImage"
                     android:layout_width="fill_parent"
@@ -154,6 +139,27 @@
                     android:src="@drawable/no_camera" />
             </LinearLayout>
         </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/butCameraSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="sendCamera"
+                android:text="@string/send_camera" />
+
+            <Button
+                android:id="@+id/butCameraSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="saveCamera"
+                android:text="@string/save_camera" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
