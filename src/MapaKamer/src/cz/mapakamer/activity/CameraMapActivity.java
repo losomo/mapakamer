@@ -34,6 +34,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import cz.mapakamer.R;
 import cz.mapakamer.entity.Camera;
 import cz.mapakamer.overlay.ImageOverlayItem;
@@ -48,13 +49,16 @@ public class CameraMapActivity extends Activity {
 	private LocationListener networkLocListener;
 	private boolean gpsDialogAnswered;
 	private boolean locationInitialized = false;
-	private BoundingBoxE6 currentBBox;
+	private static final String TAG = "MyActivity";
+	//private boolean firstTime = true;
+	private BoundingBoxE6 currentBBox = new BoundingBoxE6(0,0,0,0);
 
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
     	super.onCreate(savedInstanceState);
+
 
         final MapView mapView = new MapView(this, 256);
         final List<Overlay> mapOverlays = mapView.getOverlays();
@@ -66,43 +70,65 @@ public class CameraMapActivity extends Activity {
         
 		if (!locationInitialized)
 		{
-			initLocation(mapView);
+			initLocation(mapView, mapOverlays);
 		}
         setContentView(mapView);
         setCurrentBBox(mapView);
+        Log.v(TAG, "BBox nastaven při spuštění");
        
+        
         mapView.setMapListener(new DelayedMapListener(new MapListener() {
 			
 			@Override
 			public boolean onZoom(final ZoomEvent e) {
 				setCurrentBBox(mapView);
+				Log.v(TAG, "BBox nastaven onZoom");
+				processLoadCameras(mapView, mapOverlays);
 				return false;
 			}
 			
 			@Override
 			public boolean onScroll(final ScrollEvent e) {
 				setCurrentBBox(mapView);
+				Log.v(TAG, "BBox nastaven onScroll");
+				processLoadCameras(mapView, mapOverlays);
 				return false;
 			}
 		}, 100 ));
-        LoadCameras lc = new LoadCameras();
-		lc.execute();
-		ArrayList<Camera> cameras=new ArrayList<Camera>();
-		try {
-			cameras = lc.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		addMarkerToOverlay(cameras, mapView, mapOverlays);
-        
     }
     	
-   
+
+    public void processLoadCameras(MapView mapView, List<Overlay> mapOverlays){
+        if (currentBBox.getLatNorthE6() != 0)
+        {
+        	Log.v(TAG, "prošlo se všim všudy");
+
+        	LoadCameras lc = new LoadCameras();
+        	lc.execute();
+        	
+        	Log.v(TAG, "Hodnota bboxu je: " + currentBBox.toString());
+	        Log.v(TAG, "Dostal jsem se sem");
+	                	
+        	ArrayList<Camera> cameras = new ArrayList<Camera>();
+        	try {
+        		cameras = lc.get();//tady je chyba
+        	} catch (InterruptedException e) {
+        		Log.e(TAG, "Nepodařilo se naplnit array cameras kvůli InterruptedException");
+        		e.printStackTrace();
+        	} catch (ExecutionException e) {
+        		Log.e(TAG, "Nepodařilo se naplnit array cameras kvůli ExecutionException");
+        		e.printStackTrace();
+        	}
+        	addMarkerToOverlay(cameras, mapView, mapOverlays);
+        }
+    }
+    
     public void setCurrentBBox(MapView mapView)
     {
-    	currentBBox = mapView.getProjection().getBoundingBox();
+    	//currentBBox = mapView.getProjection().getBoundingBox();
+    	currentBBox = mapView.getBoundingBox();
+        Log.v(TAG, currentBBox.toString());
+
     }
     
     public void addMarkerToOverlay(GeoPoint point, String title, String content, Drawable image, MapView mapView, List<Overlay> mapOverlays)
@@ -135,7 +161,7 @@ public class CameraMapActivity extends Activity {
     	
     }
 
-	private void initLocation(final MapView mapView) {
+	private void initLocation(final MapView mapView, final List<Overlay> mapOverlays) {
 		gpsLocListener = new LocationListener() {
 			public void onStatusChanged(String provider, int status,
 					Bundle extras) {
@@ -158,6 +184,10 @@ public class CameraMapActivity extends Activity {
 					locationInitialized = true;
 					setProgressBarIndeterminateVisibility(Boolean.FALSE);
 				}
+				/*if (!firstTime){
+					processLoadCameras(mapView, mapOverlays);
+				}
+				firstTime = false;*/
 			}
 		};
 
@@ -179,6 +209,10 @@ public class CameraMapActivity extends Activity {
 					updateLocation(mapView);
 					locationInitialized = true;
 				}
+				/*if (!firstTime){
+					processLoadCameras(mapView, mapOverlays);
+				}
+				firstTime = false;*/
 			}
 		};
 
@@ -210,16 +244,16 @@ public class CameraMapActivity extends Activity {
 				// TODO Auto-generated method stub
 				InputStream inputStream=null;
 				try {
-					
 					HttpClient httpclient = new DefaultHttpClient();
 					//HttpPost hp=new HttpPost("http://10.0.2.2:8080/Pin2_b13/GetFromDB");
 					//HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
 					HttpPost hp=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/GetFromDB");
 					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6())));
-			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6())));
-			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6())));
-			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6())));
+			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6()/1000000)));
+			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6()/1000000)));
+			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6()/1000000)));
+			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6()/1000000)));
+					        
 			        hp.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			        HttpResponse res = httpclient.execute(hp);
 			        inputStream = res.getEntity().getContent();
