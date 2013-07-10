@@ -245,14 +245,19 @@ public class CameraMapActivity extends Activity {
 				InputStream inputStream=null;
 				try {
 					HttpClient httpclient = new DefaultHttpClient();
-					//HttpPost hp=new HttpPost("http://10.0.2.2:8080/Pin2_b13/GetFromDB");
+					//HttpPost hp=new HttpPost("http://10.0.2.2:8080/mobilniMK/GetFromDB");
 					//HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
 					HttpPost hp=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/GetFromDB");
 					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6()/1000000)));
-			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6()/1000000)));
-			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6()/1000000)));
-			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6()/1000000)));
+			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6())));
+			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6())));
+			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6())));
+			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6())));
+			        
+			   /*     nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(50078927)));
+			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(50068434)));
+			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(14413461)));
+			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(14403162)));*/
 					        
 			        hp.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			        HttpResponse res = httpclient.execute(hp);

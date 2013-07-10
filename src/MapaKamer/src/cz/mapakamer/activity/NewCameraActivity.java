@@ -1,11 +1,14 @@
 package cz.mapakamer.activity;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import org.apache.http.client.ClientProtocolException;
@@ -28,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -48,6 +52,7 @@ import cz.mapakamer.utils.GPSUtility;
 public class NewCameraActivity extends Activity {
 
 	public static final int CAPTURE_IMG = 0;
+	private static final String TAG = "MyActivity";
 
 	protected Camera camera;
 	private Uri imageUri;
@@ -196,7 +201,7 @@ public class NewCameraActivity extends Activity {
 	}
 	
 	public void saveCamera(View view) {		
-		String record = et_desc.getText().toString() + ";" + Double.toString(camera.getLatitude()) + ";" + Double.toString(camera.getLongitude()) + ";" + picfilename; 
+		String record = et_desc.getText().toString() + "\n" + Double.toString(camera.getLatitude()) + "\n" + Double.toString(camera.getLongitude()) + "\n" + picfilename; 
 		
 		File directory = new File(Environment.getExternalStorageDirectory()+File.separator+"MapaKamer");
 		File cameraContent = new File(directory, contentfilename);
@@ -268,9 +273,31 @@ public class NewCameraActivity extends Activity {
 				//HttpPost httppost=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/SaveToDB");
 				HttpPost httppost=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/SaveToDB");
 				ByteArrayOutputStream bos=new ByteArrayOutputStream();
+				if (imageBitmap == null)
+				{
+					Bitmap bitmap;
+					
+					bitmap = BitmapFactory.decodeResource(getResources(),
+                            R.drawable.no_camera);
+					imageBitmap = bitmap;					
+				}
 				imageBitmap.compress(CompressFormat.JPEG, 50, bos);
 				byte[] data=bos.toByteArray();
-				entity.addPart("uploaded", new ByteArrayBody(data,"myImage.jpg"));
+				entity.addPart("uploaded", new ByteArrayBody(data, contentfilename));
+				
+				/*Log.v(TAG, et_desc.getText().toString());
+				Log.v(TAG, Double.toString(camera.getLatitude()));
+				Log.v(TAG, Double.toString(camera.getLongitude()));
+				
+				java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream((int)entity.getContentLength());
+				entity.writeTo(out);
+				//byte[] entityContentAsBytes = out.toByteArray();
+				// or convert to string
+				String entityContentAsString = new String(out.toByteArray());
+				
+				Log.v(TAG, entityContentAsString);
+				*/
+				
 				httppost.setEntity(entity);	// Execute HTTP Post Request
 		        httpclient.execute(httppost,localContext);
 		        

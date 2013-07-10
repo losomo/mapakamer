@@ -23,6 +23,7 @@
     <string name="save_camera">Uložit do zařízení</string>
     <string name="camera_detail_title">Detail kamery</string>
     <string name="camera_saved">Kamera byla úspěšně nahrána do databáze.</string>
+    <string name="cameras_saved">Kamery byly úspěšně nahrány do databáze.</string>
     <string name="fail_capture">Nezdařilo se pořídit snímek!</string>
     <string name="close_button">Zavřít</string>
     <string name="gps_not_enabled">GPS zařízení je vypnuté. Pro získání přesnějšího polohy jej prosím zapněte. Přejete si přejít do nastavení?</string>
