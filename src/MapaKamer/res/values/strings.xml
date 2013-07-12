@@ -22,6 +22,7 @@
     <string name="send_camera">Odeslat kameru</string>
     <string name="save_camera">Uložit do zařízení</string>
     <string name="camera_detail_title">Detail kamery</string>
+    <string name="no_cameras">V zařízení není uložena žádná kamera</string>
     <string name="camera_saved">Kamera byla úspěšně nahrána do databáze.</string>
     <string name="cameras_saved">Kamery byly úspěšně nahrány do databáze.</string>
     <string name="fail_capture">Nezdařilo se pořídit snímek!</string>
@@ -29,6 +30,6 @@
     <string name="gps_not_enabled">GPS zařízení je vypnuté. Pro získání přesnějšího polohy jej prosím zapněte. Přejete si přejít do nastavení?</string>
     <string name="title_activity_add_cameras">AddCamerasActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="send_cameras">Odeslat označené kamery</string>
+    <string name="send_cameras">Odeslat všechny kamery</string>
 
 </resources>

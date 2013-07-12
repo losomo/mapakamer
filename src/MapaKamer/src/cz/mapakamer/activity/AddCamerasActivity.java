@@ -24,9 +24,13 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +39,7 @@ import cz.mapakamer.entity.Camera;
 
 public class AddCamerasActivity extends Activity {
 
+	private static final String TAG = "MyActivity";
 	private Bitmap imageBitmap;
 	protected Camera cam;
 	public ArrayList<Camera> cameras = new ArrayList<Camera>();
@@ -63,6 +68,12 @@ public class AddCamerasActivity extends Activity {
 	
 	private boolean getCameras(){
 		File directory = new File(Environment.getExternalStorageDirectory()+File.separator+"MapaKamer");
+
+		//check if there are some files in directory
+		if (directory.listFiles().length == 0)
+		{
+			return false;
+		}
 		
 		for (File f : directory.listFiles()) {
 			if(f.isFile() && f.toString().endsWith(".txt"))
@@ -85,8 +96,11 @@ public class AddCamerasActivity extends Activity {
 				    double longitude = Double.parseDouble(line);
 				    camera.setLongitude(longitude);
 				    
+				    //TODO vyřešit co dělat když nebude žádný obrázek
 				    line = br.readLine();
 				    String picfilename = line;
+				    String path = directory + File.separator + picfilename;
+				    camera.setImage(Drawable.createFromPath(path));
 				    camera.setImageBase64Encoded(picfilename);
 				    
 				    cameras.add(camera);
@@ -130,15 +144,16 @@ public class AddCamerasActivity extends Activity {
 		}
 	}
 	
-	public void processLoadCameras(){
+	public void processLoadCameras(View view){
 		if (getCameras())
 		{
+			Log.v(TAG, "kamery načteny:");
+			//Log.v(TAG, cameras.get(0).getDescription());
 			addCameras();
 			deleteFiles();
 			AddCamerasActivity.this.cameraSavedDialogPreperation().show();
-			
 		}
-		
+		else AddCamerasActivity.this.noCamerasDialogPreperation().show();
 	}
 	
 	private Builder cameraSavedDialogPreperation() {
@@ -156,6 +171,21 @@ public class AddCamerasActivity extends Activity {
 		return dialog;
 	}
 	
+	private Builder noCamerasDialogPreperation() {
+		Builder dialog;
+		dialog = new AlertDialog.Builder(this);
+
+		dialog.setMessage(getResources().getString(R.string.no_cameras));
+		dialog.setPositiveButton(android.R.string.ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						finish();
+					}
+				});
+		return dialog;
+	}	
+	
 	private class processSendingTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... tmp) {
@@ -168,6 +198,8 @@ public class AddCamerasActivity extends Activity {
 				HttpClient httpclient = new DefaultHttpClient();
 				HttpPost httppost=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/SaveToDB");
 				ByteArrayOutputStream bos=new ByteArrayOutputStream();
+				Drawable image = cam.getImage();
+				imageBitmap =  ((BitmapDrawable)image).getBitmap();
 				imageBitmap.compress(CompressFormat.JPEG, 50, bos);
 				byte[] data=bos.toByteArray();
 				entity.addPart("uploaded", new ByteArrayBody(data,"Mapa Kamer" + File.separator + cam.getImageBase64Encoded()));

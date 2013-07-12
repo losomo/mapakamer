@@ -200,12 +200,21 @@ public class NewCameraActivity extends Activity {
 
 	}
 	
-	public void saveCamera(View view) {		
-		String record = et_desc.getText().toString() + "\n" + Double.toString(camera.getLatitude()) + "\n" + Double.toString(camera.getLongitude()) + "\n" + picfilename; 
+	public void saveCamera(View view) {
+		//TODO ukládat POUZE s FOTOGRAFIÍ
 		
 		File directory = new File(Environment.getExternalStorageDirectory()+File.separator+"MapaKamer");
+		
 		File cameraContent = new File(directory, contentfilename);
 		OutputStream out = null;
+		String record;
+		
+		if (cameraContent.exists())
+		{
+			record = et_desc.getText().toString() + "\n" + Double.toString(camera.getLatitude()) + "\n" + Double.toString(camera.getLongitude()) + "\n" + picfilename; 
+		}
+		//TODO zjistit cestu obrázku no_camera na serveru a dát ho sem. udělat to ale i u přímého nahrávání
+		else record = et_desc.getText().toString() + "\n" + Double.toString(camera.getLatitude()) + "\n" + Double.toString(camera.getLongitude()) + "\n" + picfilename; 
 		
 		try {
 			out = new BufferedOutputStream(new FileOutputStream(cameraContent));
@@ -276,7 +285,8 @@ public class NewCameraActivity extends Activity {
 				if (imageBitmap == null)
 				{
 					Bitmap bitmap;
-					
+					//TODO vymyslet to tak aby se obrázek nenahrával pořád na server, ale byl tam jen jeden
+					//TODO to znamená nahrávat jen v případě že soubor existuje, jinak odeslat pouze údaje do DB
 					bitmap = BitmapFactory.decodeResource(getResources(),
                             R.drawable.no_camera);
 					imageBitmap = bitmap;					
