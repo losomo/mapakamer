@@ -88,7 +88,7 @@ public class SaveToDB extends HttpServlet {
 			buf = new BufferedInputStream(request.getPart("uploaded").getInputStream());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyMMddHHmmssSSS");
 			//File file=new File("/home/martin/img/"+String.format(sdf.format(new Date()))+".jpg");
-			File file=new File("/home/pin2_b13/kamery_img/"+String.format(sdf.format(new Date()))+".jpg");
+			File file=new File("/home/ubuntu/kamery_img/"+String.format(sdf.format(new Date()))+".jpg");
 			String imagePath=file.getAbsolutePath();
 			ByteArrayBuffer baf=new ByteArrayBuffer();
 			int current=0;
@@ -106,7 +106,7 @@ public class SaveToDB extends HttpServlet {
 				if(conn != null) 
 				{
 					Statement stmt = conn.createStatement();
-					stmt.executeQuery("INSERT INTO b_kamery(jmeno,lat,lon,image) VALUES ('"+luxus+"',"+lat+","+lon+",'"+imagePath+"')");
+					stmt.executeQuery("INSERT INTO b_kamery(name,lat,lon,image) VALUES ('"+luxus+"',"+lat+","+lon+",'"+imagePath+"')");
 					
 				}
 			}

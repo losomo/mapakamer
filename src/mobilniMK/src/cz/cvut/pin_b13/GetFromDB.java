@@ -3,6 +3,7 @@ package cz.cvut.pin_b13;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -56,16 +57,19 @@ public class GetFromDB extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		ServletOutputStream os=null;
+		
 		try
 		{
 			String path=request.getParameter("path");
+			String northS=(request.getParameter("north"));
 			if(path!=null)
 			{
+				ServletOutputStream os=response.getOutputStream();
+
 			 	int bytesRead = 0;  
 		        byte[] buff = new byte[1024*10];  
 		   
-		        os = response.getOutputStream();  
+ 
 		   
 		        response.setContentType("image/jpg");  
 		        BufferedInputStream bis = null;  
@@ -88,8 +92,13 @@ public class GetFromDB extends HttpServlet {
 		                os.close();
 		        }
 			}
-			else{
-	
+			else if(northS!=null){
+			double north=Double.parseDouble(northS)/1000000;
+			double south=Double.parseDouble(request.getParameter("south"))/1000000;
+			double east=Double.parseDouble(request.getParameter("east"))/1000000;
+			double west=Double.parseDouble(request.getParameter("west"))/1000000;
+
+			
 			
 			if (ds != null) 
 			{
@@ -97,17 +106,19 @@ public class GetFromDB extends HttpServlet {
 	    
 				if(conn != null)
 				{
-					os=response.getOutputStream();
+					
 					response.setContentType("text/plain; charset=UTF-8");
 					response.setCharacterEncoding("UTF-8");
 					Statement stmt = conn.createStatement();
-					ResultSet rst = stmt.executeQuery("SELECT osm_id,lat,lon,image FROM b_kamery limit 50");
-					
+					String query="SELECT name,lat,lon,image FROM b_kamery WHERE ((lon BETWEEN "+ south+" AND "+north+") AND (lat BETWEEN "+west+" AND "+east+"))";
+					ResultSet rst = stmt.executeQuery(query);
+					PrintWriter pw=response.getWriter();
 					while(rst.next()!=false) {
-						for(int i=1;i<=4;i++)
-						{os.print(rst.getString(i) + "::");}
-						os.print(";");
+						for(int i=1;i<rst.getMetaData().getColumnCount();i++)
+						{pw.print(rst.getString(i) + "::");}
+						pw.print(rst.getString(rst.getMetaData().getColumnCount())+";");
 					}
+					pw.close();
 					conn.close();
 				}
 			}}}
@@ -117,7 +128,8 @@ public class GetFromDB extends HttpServlet {
 			e.printStackTrace();
 		}
 		finally{
-			os.close();
+			//os.close();
+			
 		}
 	}}
 	
