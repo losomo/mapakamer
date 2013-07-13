@@ -99,9 +99,10 @@ public class CameraMapActivity extends Activity {
     	
 
     public void processLoadCameras(MapView mapView, List<Overlay> mapOverlays){
-        if (currentBBox.getLatNorthE6() != 0)
+        if (currentBBox.getLatNorthE6() != 0 && mapView.getZoomLevel() > 14)
         {
-        	Log.v(TAG, "prošlo se všim všudy");
+        	
+        	mapOverlays.clear();
 
         	LoadCameras lc = new LoadCameras();
         	lc.execute();
@@ -111,7 +112,8 @@ public class CameraMapActivity extends Activity {
 	                	
         	ArrayList<Camera> cameras = new ArrayList<Camera>();
         	try {
-        		cameras = lc.get();//tady je chyba
+        		cameras = lc.get();
+        		Log.v(TAG, cameras.toString());
         	} catch (InterruptedException e) {
         		Log.e(TAG, "Nepodařilo se naplnit array cameras kvůli InterruptedException");
         		e.printStackTrace();
@@ -119,8 +121,13 @@ public class CameraMapActivity extends Activity {
         		Log.e(TAG, "Nepodařilo se naplnit array cameras kvůli ExecutionException");
         		e.printStackTrace();
         	}
-        	addMarkerToOverlay(cameras, mapView, mapOverlays);
-        }
+        	if (!(cameras.isEmpty()))
+        	{
+        		//TODO pouští se i když by neměl
+        		addMarkerToOverlay(cameras, mapView, mapOverlays);
+        	}
+        	else Log.v(TAG, "Success") ;
+		}
     }
     
     public void setCurrentBBox(MapView mapView)
@@ -158,6 +165,7 @@ public class CameraMapActivity extends Activity {
     		itemizedOverlay.addItem(overlayItem);
     		mapView.getOverlays().add(itemizedOverlay.getOverlay());
     	}
+    	Log.v(TAG, "pocet kamer v overlayi je " + Integer.toString(mapOverlays.size()));
     	
     }
 
@@ -245,14 +253,21 @@ public class CameraMapActivity extends Activity {
 				InputStream inputStream=null;
 				try {
 					HttpClient httpclient = new DefaultHttpClient();
-					//HttpPost hp=new HttpPost("http://10.0.2.2:8080/Pin2_b13/GetFromDB");
+					//HttpPost hp=new HttpPost("http://10.0.2.2:8080/mobilniMK/GetFromDB");
 					//HttpPost hp=new HttpPost("http://geo102.fsv.cvut.cz:8080/Pin213/GetFromDB");
+					Log.v(TAG, "ještě tu jsem");
 					HttpPost hp=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/GetFromDB");
+					Log.v(TAG, "a tady?");
 					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6()/1000000)));
-			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6()/1000000)));
-			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6()/1000000)));
-			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6()/1000000)));
+			        nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(currentBBox.getLatNorthE6())));
+			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(currentBBox.getLatSouthE6())));
+			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(currentBBox.getLonEastE6())));
+			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(currentBBox.getLonWestE6())));
+			        
+			   /*     nameValuePairs.add(new BasicNameValuePair("north", Integer.toString(50078927)));
+			        nameValuePairs.add(new BasicNameValuePair("south", Integer.toString(50068434)));
+			        nameValuePairs.add(new BasicNameValuePair("east", Integer.toString(14413461)));
+			        nameValuePairs.add(new BasicNameValuePair("west", Integer.toString(14403162)));*/
 					        
 			        hp.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			        HttpResponse res = httpclient.execute(hp);
@@ -277,12 +292,22 @@ public class CameraMapActivity extends Activity {
 		    		for(int i=0;i<kamera.length;i++)
 		    		{
 		    			castKamery=kamera[i].split("::");
+		    			
 		    			Camera cam=new Camera();
+
 		    			//cam.setId(Integer.parseInt(castKamery[0]));
-		    			cam.setCoordinates(new GeoPoint(Double.parseDouble(castKamery[2]),Double.parseDouble(castKamery[1])));
-		    			cam.setDescription(castKamery[0]);
-		    			cam.setAddress(castKamery[3]);
-		    			cameras.add(cam);
+		    			/*if (castKamery == null) {
+		    				Log.v(TAG, "vrací null");
+		    				return null;}*/
+		    			//TODO leze sem a nemá
+		    			//else
+		    			//{
+		    				Log.v(TAG, "a přece sem leze");
+		    				cam.setCoordinates(new GeoPoint(Double.parseDouble(castKamery[2]),Double.parseDouble(castKamery[1])));
+		    				cam.setDescription(castKamery[0]);
+		    				cam.setAddress(castKamery[3]);
+		    				cameras.add(cam);
+		    			//}
 		    		}
 		    		return cameras;
 			    } catch (ClientProtocolException ey) {
