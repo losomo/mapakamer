@@ -99,34 +99,34 @@ public class CameraMapActivity extends Activity {
     	
 
     public void processLoadCameras(MapView mapView, List<Overlay> mapOverlays){
-        if (currentBBox.getLatNorthE6() != 0 && mapView.getZoomLevel() > 14)
+    	/* Clear overlay
+    	 * 
+    	 */
+    	mapOverlays.clear();
+
+    	/* Load cameras to overlay if close enough
+    	 * 
+    	 */
+    	if (currentBBox.getLatNorthE6() != 0 && mapView.getZoomLevel() > 14)
         {
         	
         	mapOverlays.clear();
 
         	LoadCameras lc = new LoadCameras();
         	lc.execute();
-        	
-        	Log.v(TAG, "Hodnota bboxu je: " + currentBBox.toString());
-	        Log.v(TAG, "Dostal jsem se sem");
-	                	
+
         	ArrayList<Camera> cameras = new ArrayList<Camera>();
         	try {
         		cameras = lc.get();
-        		Log.v(TAG, cameras.toString());
+        		//Log.v(TAG, cameras.toString());
         	} catch (InterruptedException e) {
-        		Log.e(TAG, "Nepodařilo se naplnit array cameras kvůli InterruptedException");
+        		Log.e(TAG, "Failed to fill cameras array. InterruptedException");
         		e.printStackTrace();
         	} catch (ExecutionException e) {
-        		Log.e(TAG, "Nepodařilo se naplnit array cameras kvůli ExecutionException");
+        		Log.e(TAG, "Failed to fill cameras array. ExecutionException");
         		e.printStackTrace();
         	}
-        	if (!(cameras.isEmpty()))
-        	{
-        		//TODO pouští se i když by neměl
-        		addMarkerToOverlay(cameras, mapView, mapOverlays);
-        	}
-        	else Log.v(TAG, "Success") ;
+       		addMarkerToOverlay(cameras, mapView, mapOverlays);
 		}
     }
     
@@ -279,24 +279,28 @@ public class CameraMapActivity extends Activity {
 		            StringBuilder stringBuilder = new StringBuilder();
 
 		            String bufferedStrChunk = null;
+
 		            //EditText et = (EditText) findViewById(R.id.editText1);
 		            while((bufferedStrChunk = bufferedReader.readLine()) != null){
-		                stringBuilder.append(bufferedStrChunk);
+		            	stringBuilder.append(bufferedStrChunk);
 		            }
 		            //this.mujText=stringBuilder.toString();
-		            String kamery= stringBuilder.toString();
-		            ArrayList<Camera> cameras = new ArrayList<Camera>();
+		            Log.v(TAG, Integer.toString(stringBuilder.length()));
+		            if (stringBuilder.length() != 0)
+		            {
+		            	String kamery= stringBuilder.toString();
+		            	ArrayList<Camera> cameras = new ArrayList<Camera>();
 		    		
-		    		String[] kamera = kamery.split(";");
-		    		String[] castKamery=null;
-		    		for(int i=0;i<kamera.length;i++)
-		    		{
-		    			castKamery=kamera[i].split("::");
+		            	String[] kamera = kamery.split(";");
+		            	String[] castKamery=null;
+		            	for(int i=0;i<kamera.length;i++)
+		            	{
+		            		castKamery=kamera[i].split("::");
 		    			
-		    			Camera cam=new Camera();
+		            		Camera cam=new Camera();
 
 		    			//cam.setId(Integer.parseInt(castKamery[0]));
-		    			/*if (castKamery == null) {
+		    			/*if (castKamery.length == 0) {
 		    				Log.v(TAG, "vrací null");
 		    				return null;}*/
 		    			//TODO leze sem a nemá
@@ -308,8 +312,22 @@ public class CameraMapActivity extends Activity {
 		    				cam.setAddress(castKamery[3]);
 		    				cameras.add(cam);
 		    			//}
-		    		}
-		    		return cameras;
+		            	}
+		            	return cameras;
+		            }
+		            else
+			          {		            	
+		            	/*Ochcávka totálního stupně -- vyrobím kameru někde jinde (kde nebude vidět)
+		            	 * 
+		            	 */
+		            	ArrayList<Camera> cameras = new ArrayList<Camera>();
+		            	Camera cam = new Camera();
+		            	cam.setCoordinates(new GeoPoint(90000000,0));
+	    				cam.setDescription("Santa Claus is watching you!!!");
+	    				cam.setAddress("North pole");
+	    				cameras.add(cam);
+	    				return cameras;
+		               }
 			    } catch (ClientProtocolException ey) {
 			        System.out.println("Chyba1");
 			        ey.printStackTrace();
