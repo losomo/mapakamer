@@ -1,5 +1,7 @@
 package cz.mapakamer.entity;
 
+import java.util.Date;
+
 import org.osmdroid.util.GeoPoint;
 
 import android.graphics.drawable.Drawable;
@@ -20,6 +22,8 @@ public class Camera {
     private int status;
 	private String imageBase64Encoded;
 	private int distance;
+	private Date validFrom;
+	private Date validTo;
     
 	
 
@@ -93,6 +97,18 @@ public class Camera {
 	}
 	public void setImageBase64Encoded(String imageBase64Encoded) {
 		this.imageBase64Encoded = imageBase64Encoded;
+	}
+	public Date getValidFrom() {
+		return validFrom;
+	}
+	public void setValidFrom(Date validFrom) {
+		this.validFrom = validFrom;
+	}
+	public Date getValidTo() {
+		return validTo;
+	}
+	public void setValidTo(Date validTo) {
+		this.validTo = validTo;
 	}
 	
 	

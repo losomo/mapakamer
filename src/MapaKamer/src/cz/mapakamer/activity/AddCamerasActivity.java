@@ -193,8 +193,8 @@ public class AddCamerasActivity extends Activity {
 				MultipartEntity entity=new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 				HttpContext localContext = new BasicHttpContext();
 				entity.addPart("jmeno", new StringBody(cam.getDescription()));
-				entity.addPart("lon",new StringBody(Double.toString(cam.getLatitude())));
-				entity.addPart("lat",new StringBody(Double.toString(cam.getLongitude())));
+				entity.addPart("lat",new StringBody(Double.toString(cam.getLatitude())));
+				entity.addPart("lon",new StringBody(Double.toString(cam.getLongitude())));
 				HttpClient httpclient = new DefaultHttpClient();
 				HttpPost httppost=new HttpPost("http://www.mapakamer.cz/mobilniMK/mobilniMK/SaveToDB");
 				ByteArrayOutputStream bos=new ByteArrayOutputStream();

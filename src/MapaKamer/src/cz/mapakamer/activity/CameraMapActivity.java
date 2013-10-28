@@ -159,7 +159,7 @@ public class CameraMapActivity extends Activity {
         	String path= camera.getAddress();
     		Drawable image = camera.getImage();
     		GeoPoint point = camera.getCoordinates();
-    		GeoPoint point2 = new GeoPoint(camera.getLongitude(), camera.getLatitude());
+    		//GeoPoint point2 = new GeoPoint(camera.getLongitude(), camera.getLatitude());
 
     		ImageOverlayItem overlayItem = new ImageOverlayItem(path, content, point, image);
     		itemizedOverlay.addItem(overlayItem);

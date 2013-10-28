@@ -273,8 +273,8 @@ public class NewCameraActivity extends Activity {
 				HttpContext localContext = new BasicHttpContext();
 				entity.addPart("jmeno", new StringBody(et_desc.getText().toString()));
 				//entity.addPart("lat",new StringBody(et_location.getText().toString()));
-				entity.addPart("lon",new StringBody(Double.toString(camera.getLatitude())));
-				entity.addPart("lat",new StringBody(Double.toString(camera.getLongitude())));
+				entity.addPart("lat",new StringBody(Double.toString(camera.getLatitude())));
+				entity.addPart("lon",new StringBody(Double.toString(camera.getLongitude())));
 				//entity.addPart("lat",new StringBody("49.8"));
 				//entity.addPart("lon",new StringBody("14.5"));
 				HttpClient httpclient = new DefaultHttpClient();
