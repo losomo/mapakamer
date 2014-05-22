@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <title>Mapa kamer</title>
+        <script src="http://openlayers.org/api/OpenLayers.js"></script>
+        <script src="XAPI.js"></script>
+        <style>
+            .editButton {
+                content: "Edit";
+                height: 50px;
+                width: 50px;
+                background: purple;
+                color: black;
+            }
+        </style>
+        <!--
+                      new OpenLayers.Control.Button({
+                        displayClass: "editButton", trigger: function() {window.location = './potlatch2/potlatch2.html'}
+                      })
+        -->
+        <script type="text/javascript">
+            var lat=50.08;
+            var lon=14.4;
+            var zoom=14;
+            var map;
+ 
+            function init(){
+                var epsg900913 = new OpenLayers.Projection("EPSG:900913");
+                var epsg4326 = new OpenLayers.Projection("EPSG:4326");
+                map = new OpenLayers.Map ("map", {
+                controls:[
+                      new OpenLayers.Control.Navigation(),
+                      new OpenLayers.Control.PanZoomBar(),
+                      new OpenLayers.Control.LayerSwitcher(),
+                      new OpenLayers.Control.Attribution({separator: "<br/>"})
+                    ],
+                    units: 'm',
+                    projection: epsg900913,
+                    displayProjection: epsg4326
+                } );
+ 
+ 
+                map.addLayer(new OpenLayers.Layer.OSM());
+ 
+                var lonLat = new OpenLayers.LonLat(lon, lat).transform(epsg4326, epsg900913);
+ 
+                map.setCenter (lonLat, zoom);
+ 
+                var kameryStyleMap = new OpenLayers.StyleMap({
+                    pointRadius: 10,
+                    externalGraphic: 'cctv.png',
+                    graphicXOffset: -10, 
+                    graphicYOffset: -20
+                });
+                var onlinelayer = new OpenLayers.Layer.Vector("Kamery", {
+                    styleMap: kameryStyleMap,
+                    attribution: "Icons CC-By-SA by <a href=\"http://mapicons.nicolasmollet.com/\" target=\"_blank\">Nicolas Mollet</a>",
+                    strategies: [
+                        new OpenLayers.Strategy.BBOX({
+                            ratio: 1.6
+                        })
+                    ],
+                    protocol: new OpenLayers.Protocol.XAPI({
+                        element: 'node',
+                        predicate: 'man_made=surveillance',
+                        format: new OpenLayers.Format.OSM({
+                            internalProjection: epsg900913,
+                            externalProjection: epsg4326
+                        })
+                    })
+                });
+ 
+                map.addLayers([onlinelayer]);
+                /*
+                map.events.register('zoomend', this, function (event) {
+                    var x = map.getZoom();
+                    if( x < 10) {
+                        map.zoomTo(10);
+                    }
+                });
+                */
+            }
+        </script>
+    </head>
+    <body onload="init()">
+        <div id="name"></div>
+        <div id="map" class="smallmap"></div>
+        </div>
+    </body>
+</html>
